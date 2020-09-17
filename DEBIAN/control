@@ -1,0 +1,9 @@
+Package: atlas200-tools
+Version: 2020-09-16
+Priority: optional
+Architecture: arm64
+Installed-Size: 66666
+Maintainer: qiaoshouxing
+Description: atlas200 drivers & tools
+
+

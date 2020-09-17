@@ -1,0 +1,44 @@
+#!/bin/sh
+
+install_security_config() {
+    local set_write_flag="false"
+    if [ ! -w "/etc/sudoers" ];then
+        chmod u+w /etc/sudoers
+        set_write_flag="true"
+    fi
+
+    grep -q "HwHiAiUser" /etc/sudoers
+    if [ $? -eq 0 ];then
+        sed -i '/HwHiAiUser/c\HwHiAiUser ALL=(root) NOPASSWD:/bin/date -s *,/usr/bin/ide_cmd.sh *,/usr/sbin/dmidecode -t processor' /etc/sudoers
+    else
+        echo "HwHiAiUser ALL=(root) NOPASSWD:/bin/date -s *,/usr/bin/ide_cmd.sh,/usr/sbin/dmidecode -t processor" >> /etc/sudoers
+    fi
+
+    if [ $set_write_flag = "true" ];then
+        chmod u-w /etc/sudoers
+    fi
+
+    unset set_write_flag
+
+    ##add gdb attach permission for HwHiAiUser
+    if [ ! -f /etc/sysctl.d/10-ptrace.conf ];then
+        if [ ! -d /etc/sysctl.d ];then
+            mkdir -p /etc/sysctl.d
+        fi
+        echo "kernel.yama.ptrace_scope = 0" >> /etc/sysctl.d/10-ptrace.conf
+    else
+        result=`grep -rn "kernel.yama.ptrace_scope" /etc/sysctl.d/10-ptrace.conf`
+        if [ "x$result" != "x" ];then
+            sed -i '/kernel.yama.ptrace_scope/d' /etc/sysctl.d/10-ptrace.conf
+            echo "kernel.yama.ptrace_scope = 0" >> /etc/sysctl.d/10-ptrace.conf
+        else
+            echo "kernel.yama.ptrace_scope = 0" >> /etc/sysctl.d/10-ptrace.conf
+        fi
+    fi
+    return 0
+}
+
+useradd -m --force-badname HwHiAiUser &> /dev/null
+install_security_config
+
+

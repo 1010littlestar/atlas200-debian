@@ -1,0 +1,83 @@
+#!/bin/sh
+
+des_dir=/usr/local/HiAI
+
+username=HwHiAiUser
+usergroup=HwHiAiUser
+ide_daemon_path=`eval echo "~${username}"`/ide_daemon
+
+changeMode(){
+    chmod -f 750 $des_dir
+    chown -f ${username}:${usergroup} $des_dir
+
+    chmod -Rf 550 ${des_dir}/driver/host
+
+    chmod -Rf 550 ${des_dir}/driver/lib64
+    chown -Rf ${username}:${usergroup} ${des_dir}/driver/lib64
+
+    chmod -Rf 550 ${des_dir}/driver/tools
+    chmod -f 600 ${des_dir}/driver/tools/*.pem
+    chmod -f 640 ${des_dir}/driver/tools/ide_daemon.cfg ${des_dir}/driver/tools/slog.conf
+    chown -Rf ${username}:${usergroup} ${des_dir}/driver/tools
+    
+    chmod -f 550 ${des_dir}/driver/boot
+    chown -f ${username}:${usergroup} ${des_dir}/driver/boot
+    chmod -f 550 ${des_dir}/driver/boot/*.sh
+
+    chmod -f 550 ${des_dir}/driver/config
+    chown -f ${username}:${usergroup} ${des_dir}/driver/config
+    chmod -f 640 ${des_dir}/driver/config/project_user_config
+    chown -f ${username}:${usergroup} ${des_dir}/driver/config/project_user_config
+
+    chmod -Rf 550 ${des_dir}/driver/device
+    
+    chmod -Rf 550 ${des_dir}/firmware
+    chmod -f 640 ${des_dir}/firmware/upgrade.cfg
+
+    chmod -f 750 ${des_dir}/others
+    chown -f ${username}:${usergroup} ${des_dir}/others
+
+    chmod -f 640 /etc/slog.conf
+    chown -f ${username}:${usergroup} /etc/slog.conf 
+
+    chmod 700 ${ide_daemon_path}
+    chown -f ${username}:${usergroup} ${ide_daemon_path}
+    chmod -f 640 ${ide_daemon_path}/ide_daemon.cfg
+    chmod -f 600 ${ide_daemon_path}/ide_daemon_cacert.pem 
+    chmod -f 600 ${ide_daemon_path}/ide_daemon_client_cert.pem 
+    chmod -f 600 ${ide_daemon_path}/ide_daemon_client_key.pem 
+    chmod -f 600 ${ide_daemon_path}/ide_daemon_server_cert.pem 
+    chmod -f 600 ${ide_daemon_path}/ide_daemon_server_key.pem
+    chown -f ${username}:${usergroup} ${ide_daemon_path}/ide_daemon.cfg 
+    chown -f ${username}:${usergroup} ${ide_daemon_path}/ide_daemon_cacert.pem 
+    chown -f ${username}:${usergroup} ${ide_daemon_path}/ide_daemon_client_cert.pem
+    chown -f ${username}:${usergroup} ${ide_daemon_path}/ide_daemon_client_key.pem 
+    chown -f ${username}:${usergroup} ${ide_daemon_path}/ide_daemon_server_cert.pem 
+    chown -f ${username}:${usergroup} ${ide_daemon_path}/ide_daemon_server_key.pem
+
+    chmod -f 550 /usr/bin/ide_cmd.sh
+    chown -f ${username}:${usergroup} /usr/bin/ide_cmd.sh
+
+	chmod 700 /usr/slog
+    chown -f ${username}:${usergroup} /usr/slog
+}
+
+subdir_create() {
+	path=$1
+	if [ ! -d $path ];then
+		mkdir -p $path
+	fi
+
+	chmod 750 $path
+	chown $username:$usergroup $path
+
+	return 0
+}
+
+install_path() {
+	subdir_create /usr/slog
+	subdir_create /home/HwHiAiUser/profiler
+	return 0
+}
+
+changeMode

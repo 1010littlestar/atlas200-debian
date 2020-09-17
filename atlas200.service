@@ -1,0 +1,6 @@
+[Unit]
+Description=atlas200 
+
+[Service]
+Type=simple
+ExecStart=/usr/local/HiAI/atlas200.sh
