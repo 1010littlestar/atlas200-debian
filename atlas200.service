@@ -3,4 +3,4 @@ Description=atlas200
 
 [Service]
 Type=simple
-ExecStart=/usr/local/HiAI/atlas200.sh
+ExecStart=/usr/local/bin/atlas200.sh

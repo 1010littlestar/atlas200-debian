@@ -10,11 +10,17 @@ toolspath=$homepath/driver/tools
 username=HwHiAiUser
 usergroup=HwHiAiUser
 
-insmod $kopath/drv_seclib_host.ko
-insmod $kopath/drv_pcie_host.ko type="3559"
-insmod $kopath/drv_devmng_host.ko
-insmod $kopath/drv_pcie_hdc_host.ko
-insmod $kopath/drv_pcie_vnic_host.ko
+echo "startup insmod atlas200 drivers"
+
+if [ ! -n "$(lsmod | grep drv_seclib_host)" ] ; then
+    insmod $kopath/drv_seclib_host.ko
+    insmod $kopath/drv_pcie_host.ko type="3559"
+    insmod $kopath/drv_devmng_host.ko
+    insmod $kopath/drv_pcie_hdc_host.ko
+    insmod $kopath/drv_pcie_vnic_host.ko
+fi
+
+echo "startup hdcd"
 
 hdc_cdev_check()
 {
@@ -45,16 +51,23 @@ fi
 chmod -f 750 /var/log/hdcd
 
 
+
+echo "startup slogd"
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$homepath/driver/lib64
 su ${username} -s /bin/sh -c "nohup $toolspath/slogd &"
+
+echo "startup sklogd"
 nohup $toolspath/sklogd &
 sleep 0.1
+
+echo "startup IDE-daemon-host"
 su ${username} -s /bin/sh -c "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$homepath/driver/lib64;nohup $toolspath/IDE-daemon-host &"
-sleep 0.1
-su ${username} -s /bin/sh -c "nohup $toolspath/hdcd >/dev/null 2>&1 &"
 sleep 0.1
 
 echo "startup hdcd"
-echo "davinci host init finish"
+su ${username} -s /bin/sh -c "nohup $toolspath/hdcd >/dev/null 2>&1 &"
+sleep 0.1
+
+echo "atlas200 init finish"
 
 exit 0

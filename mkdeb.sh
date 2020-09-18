@@ -193,6 +193,7 @@ install_bins() {
 
     mkdir -p ${OUT_DIR}/etc/
     cp ${bin_dir}/slog.conf ${OUT_DIR}/etc/
+    mkdir -p ${OUT_DIR}/usr/slog
     log "copy slog.conf"
 
 	log "install bins success"
@@ -359,7 +360,7 @@ install_cfgs() {
     if [ ! -d ${OUT_DIR}/lib ];then
         mkdir -p ${OUT_DIR}/lib
     fi
-    echo DAVINCI_HOME_PATH=$homepath > ${OUT_DIR}/lib/davinci.conf
+    echo "DAVINCI_HOME_PATH=/usr/local/HiAI" > ${OUT_DIR}/lib/davinci.conf
     return 0
 }
 
@@ -409,6 +410,6 @@ if [ x"1" == x"$?" ]; then
     exit 1;
 fi
 
-dpkg-deb -b ${OUT_DIR} atlas200.deb
+dpkg-deb -b ${OUT_DIR} atlas200-tools.deb
 
 exit 0

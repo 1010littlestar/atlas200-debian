@@ -38,7 +38,7 @@ install_security_config() {
     return 0
 }
 
-useradd -m --force-badname HwHiAiUser &> /dev/null
+useradd -m HwHiAiUser
 install_security_config
 
 
