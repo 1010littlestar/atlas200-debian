@@ -4,3 +4,6 @@ Description=atlas200
 [Service]
 Type=simple
 ExecStart=/usr/local/bin/atlas200.sh
+
+[Install]
+WantedBy=multi-user.target

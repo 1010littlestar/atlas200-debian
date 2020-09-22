@@ -80,4 +80,6 @@ install_path() {
 	return 0
 }
 
+install_path
 changeMode
+systemctl enable atlas200.service
