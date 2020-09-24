@@ -18,6 +18,7 @@ fi
 CUR_DIR=`pwd`
 SDK_DIR="$1"
 OUT_DIR="${CUR_DIR}/out"
+SUFFIX=`date +"%Y%m%d%H%M"`
 
 des_dir=${OUT_DIR}/usr/local/HiAI
 src_dir=${SDK_DIR}/lib
@@ -95,6 +96,9 @@ install_debian_files() {
         return 1
     fi 
     cp -a ${debian_dir} ${OUT_DIR}/
+    sed ${OUT_DIR}/${debian_dir}/control
+    sed -i "/Version:/s/Version:.*/Version: ${SUFFIX}/" ${OUT_DIR}/DEBIAN/control
+
     log "copy DEBIAN finished"
 
     return 0
@@ -410,6 +414,6 @@ if [ x"1" == x"$?" ]; then
     exit 1;
 fi
 
-dpkg-deb -b ${OUT_DIR} atlas200-tools.deb
+dpkg-deb -b ${OUT_DIR} atlas200-tools-${SUFFIX}.deb
 
 exit 0
