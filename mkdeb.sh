@@ -96,7 +96,6 @@ install_debian_files() {
         return 1
     fi 
     cp -a ${debian_dir} ${OUT_DIR}/
-    sed ${OUT_DIR}/${debian_dir}/control
     sed -i "/Version:/s/Version:.*/Version: ${SUFFIX}/" ${OUT_DIR}/DEBIAN/control
 
     log "copy DEBIAN finished"
