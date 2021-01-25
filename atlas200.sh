@@ -35,22 +35,24 @@ hdc_cdev_check()
 	done
 }
 
-if [ ! -d /var/dlog ] ; then
-    mkdir -pv /var/dlog
-fi
-chmod -f 750 /var/dlog
+directory_check() {
+	path=$1
+	if [ ! -d $path ];then
+		mkdir -p $path
+	fi
 
-if [ ! -d /var/log/hisi_logs ] ; then
-    mkdir -pv /var/log/hisi_logs
-fi
-chmod -f 750 /var/log/hisi_logs
+	chmod 750 $path
+	chown $username:$usergroup $path
 
-if [ ! -d /var/log/hdcd ] ; then
-    mkdir -pv /var/log/hdcd
-fi
-chmod -f 750 /var/log/hdcd
+	return 0
+}
 
+directory_check /usr/slog
+directory_check /var/dlog
+directory_check /var/log/hisi_logs
+directory_check /var/log/hdcd
 
+hdc_cdev_check
 
 echo "startup slogd"
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$homepath/driver/lib64

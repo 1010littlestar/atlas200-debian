@@ -76,6 +76,9 @@ subdir_create() {
 
 install_path() {
 	subdir_create /usr/slog
+	subdir_create /var/dlog
+	subdir_create /var/log/hisi_logs
+	subdir_create /var/log/hdcd
 	subdir_create /home/HwHiAiUser/profiler
 	return 0
 }
